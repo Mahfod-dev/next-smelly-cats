@@ -21,6 +21,7 @@
     "colors": "^1.4.0",
     "formidable": "^2.0.1",
     "formik": "^2.2.9",
+    "http-status-codes": "^2.2.0",
     "mailgen": "^2.0.25",
     "mongoose": "^6.3.8",
     "mongoose-aggregate-paginate-v2": "^1.0.6",
