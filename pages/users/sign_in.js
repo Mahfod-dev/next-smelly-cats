@@ -4,6 +4,7 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useDispatch,useSelector } from 'react-redux';
 import { register, login } from 'store/actions/user.action';
+import { Loader } from 'helpers';
 
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
@@ -14,12 +15,9 @@ import { errorHelper } from 'helpers';
 const SignIn = () => {
 	const [formType, setFormType] = useState(false);
 
-
-
+	const { loading } = useSelector((state) => state.user);
 	const dispatch = useDispatch();
 	const router = useRouter();
-
-
 
 	const formik = useFormik({
 		initialValues: {
@@ -40,6 +38,7 @@ const SignIn = () => {
 	const submitForm = (values) => {
 		if (formType) {
 			// register
+			console.log(values);
 			dispatch(register({ data: values, router }));
 		} else {
 			// sign in
@@ -80,27 +79,31 @@ const SignIn = () => {
 						{...formik.getFieldProps('password')}
 						{...errorHelper(formik, 'password')}
 					/>
-
-					<div className='mb-3 si-btns'>
-						<Button
-							variant='contained'
-							color='primary'
-							type='submit'
-							size='small'
-							className='me-2'
-						>
-							{formType ? 'Register' : 'Sign in'}
-						</Button>
-						<Button
-							variant='outlined'
-							size='small'
-							onClick={handleFormType}
-						>
-							{formType
-								? 'Already registered ? click here'
-								: 'Already signed in ? click here'}
-						</Button>
-					</div>
+					{loading ? (
+						<Loader />
+					) : (
+						<div className='mb-3 si-btns'>
+							<Button
+								variant='contained'
+								color='primary'
+								type='submit'
+								size='small'
+								className='me-2'
+								disabled={loading}
+							>
+								{formType ? 'Register' : 'Sign in'}
+							</Button>
+							<Button
+								variant='outlined'
+								size='small'
+								onClick={handleFormType}
+							>
+								{formType
+									? 'Already registered ? click here'
+									: 'Already signed in ? click here'}
+							</Button>
+						</div>
+					)}
 				</Box>
 			</>
 		</div>

@@ -45,6 +45,7 @@ UserSchema.methods.matchPasswords = async function (password) {
 };
 
 
-const User = mongoose.model('User', UserSchema);
+
+const User = mongoose.models.User || mongoose.model('User', UserSchema);
 
 export default User;

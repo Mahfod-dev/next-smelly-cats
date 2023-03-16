@@ -24,3 +24,7 @@ export const createUser = async (firstName, lastName, email, password) => {
 
 	return user;
 };
+
+export const findUserByEmail = async (email, select) => {
+	return await User.findOne({ email }).select(select);
+};

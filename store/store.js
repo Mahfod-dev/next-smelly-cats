@@ -4,7 +4,7 @@ import notificationsReducer from './reducers/notifications.reducer';
 
 export const useStore = configureStore({
 	reducer: {
-		users: usersReducer,
+		user: usersReducer,
 		notifications: notificationsReducer,
 	},
 });
