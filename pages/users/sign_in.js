@@ -2,6 +2,8 @@ import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
+import { useDispatch,useSelector } from 'react-redux';
+import { register, login } from 'store/actions/user.action';
 
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
@@ -11,7 +13,13 @@ import { errorHelper } from 'helpers';
 
 const SignIn = () => {
 	const [formType, setFormType] = useState(false);
+
+
+
+	const dispatch = useDispatch();
 	const router = useRouter();
+
+
 
 	const formik = useFormik({
 		initialValues: {
@@ -32,7 +40,7 @@ const SignIn = () => {
 	const submitForm = (values) => {
 		if (formType) {
 			// register
-			console.log(values, 'register');
+			dispatch(register({ data: values, router }));
 		} else {
 			// sign in
 			console.log(values, 'sign in');

@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { register } from 'store/actions/user.action';
 
 const initialState = {
 	loading: false,
@@ -15,13 +16,19 @@ const initialState = {
 export const userSlice = createSlice({
 	name: 'users',
 	initialState,
-	reducers: {
-		// increment: (state) => {
-		//     state.value += 1;
-		// },
-		// decrement: (state) => {
-		//     state.value -= 1;
-		// },
+	reducers: {},
+	extraReducers: {
+		[register.pending]: (state) => {
+			state.loading = true;
+		},
+		[register.fulfilled]: (state, action) => {
+			state.loading = false;
+			state.data = action.payload;
+			state.auth = true;
+		},
+		[register.rejected]: (state) => {
+			state.loading = false;
+		},
 	},
 });
 

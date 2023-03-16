@@ -1,15 +1,14 @@
 import mongoose from 'mongoose';
+import bcrypt from 'bcryptjs';
 
 const UserSchema = new mongoose.Schema({
 	firstName: {
 		type: String,
-		required: [true, 'Please add a firstName'],
 		trim: true,
 		maxlength: [50, 'Name can not be more than 50 characters'],
 	},
 	lastName: {
 		type: String,
-		required: [true, 'Please add a lastName'],
 		trim: true,
 		maxlength: [50, 'Name can not be more than 50 characters'],
 	},
@@ -34,6 +33,17 @@ const UserSchema = new mongoose.Schema({
 		select: false,
 	},
 });
+
+UserSchema.pre('save', async function (next) {
+	if (!this.isModified('password')) return;
+	const salt = await bcrypt.genSalt(10);
+	this.password = await bcrypt.hash(this.password, salt);
+});
+
+UserSchema.methods.matchPasswords = async function (password) {
+	return await bcrypt.compare(password, this.password);
+};
+
 
 const User = mongoose.model('User', UserSchema);
 

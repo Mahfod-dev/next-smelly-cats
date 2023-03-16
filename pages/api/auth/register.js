@@ -1,4 +1,7 @@
-import { connectDB } from 'database/db';
+import connectDB from 'database/db';
+import { userExists } from 'database/services/user.service';
+import { StatusCodes } from 'http-status-codes';
+import { createUser } from 'database/services/user.service';
 
 // Path: pages/api/auth/register.js
 
@@ -7,27 +10,36 @@ const handler = async (req, res) => {
 	await connectDB();
 
 	if (req.method !== 'POST') {
-		return res.status(405).json({ message: 'Method not allowed' });
+		return res
+			.status(StatusCodes.NON_AUTHORITATIVE_INFORMATION)
+			.json({ message: 'Method not allowed' });
 	}
 
-	const { name, email, password } = req.body;
+	const { firstName, lastName, email, password } = req.body;
+
+	if (await userExists(email)) {
+		return res
+			.status(StatusCodes.NOT_FOUND)
+			.json({ message: 'User already exists' });
+	}
 
 	try {
-		const user = await User.create({
-			firstName,
-			lastName,
-			email,
-			password,
+		const user = await createUser(firstName, lastName, email, password);
+		console.log(user);
+		res.status(StatusCodes.CREATED).json({
+			message: 'User created',
+			_id: user._id,
+			firstName: user.firstName,
+			lastName: user.lastName,
+			email: user.email,
+			role: user.role,
 		});
-
-		if (!user) {
-			return res.status(400).json({ message: 'User not created' });
-		}
-
-		res.status(201).json({ message: 'User created' });
 	} catch (error) {
 		console.error(error);
-		res.status(500).json({ message: 'Server error' });
+		res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+			message: 'Server error',
+			error: error.errors,
+		});
 	}
 };
 
