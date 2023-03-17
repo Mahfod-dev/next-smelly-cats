@@ -5,6 +5,7 @@ import '../styles/globals.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import MainLayout from 'components/ui/layout.main';
 
+
 function MyApp({ Component, pageProps }) {
 	return (
 		<>

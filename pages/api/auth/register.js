@@ -25,7 +25,7 @@ const handler = async (req, res) => {
 
 	try {
 		const user = await createUser(firstName, lastName, email, password);
-		console.log(user);
+	
 		res.status(StatusCodes.CREATED).json({
 			message: 'User created',
 			_id: user._id,

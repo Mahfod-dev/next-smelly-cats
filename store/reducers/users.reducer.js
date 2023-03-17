@@ -22,12 +22,14 @@ export const userSlice = createSlice({
 			state.loading = true;
 		},
 		[register.fulfilled]: (state, action) => {
+			console.log(action.payload, 'action.payload');
 			state.loading = false;
 			state.data = action.payload;
 			state.auth = true;
 		},
-		[register.rejected]: (state) => {
+		[register.rejected]: (state, error) => {
 			state.loading = false;
+			state.error = error;
 		},
 	},
 });

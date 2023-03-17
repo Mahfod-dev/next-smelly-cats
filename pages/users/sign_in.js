@@ -39,6 +39,7 @@ const SignIn = () => {
 		if (formType) {
 			// register
 			console.log(values);
+
 			dispatch(register({ data: values, router }));
 		} else {
 			// sign in

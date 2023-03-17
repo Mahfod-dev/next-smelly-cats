@@ -8,8 +8,7 @@ export default NextAuth({
 		CredentialsProvider({
 			name: 'Credentials',
 			async authorize(credentials) {
-
-                await connectDB();
+				await connectDB();
 
 				const user = await findUserByEmail(
 					credentials.email,
@@ -19,14 +18,18 @@ export default NextAuth({
 				if (!user) {
 					throw new Error('No user found');
 				}
-
+				console.log(credentials);
 				const isMatch = await user.matchPassword(credentials.password);
 
 				if (!isMatch) {
 					throw new Error('Incorrect password');
 				}
 
-				return user;
+				if (user) {
+					return user;
+				}
+
+				return null;
 			},
 		}),
 	],
@@ -36,6 +39,13 @@ export default NextAuth({
 	jwt: {
 		secret: process.env.NEXTAUTH_SECRET,
 	},
+	pages: {
+		signIn: '/users/sign_in',
+	},
+
+
+
+
 	// callbacks: {
 	// 	async jwt(token, user, account, profile, isNewUser) {
 	// 		if (user) {
